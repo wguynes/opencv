@@ -1,0 +1,12 @@
+Source: opencv
+Maintainer: William Guynes <wguynes@pillartechnology.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.3
+Section: utils
+
+Package: opencv
+Priority: extra  
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: OpenCV libraries
+ Libraries for OpenCV

@@ -1,0 +1,10 @@
+*.pyc
+*.swp
+build.sh.out
+src/build/
+src/debian/.debhelper/
+src/debian/debhelper-build-stamp
+src/debian/files
+src/debian/opencv.debhelper.log
+src/debian/opencv.substvars
+src/debian/opencv/
