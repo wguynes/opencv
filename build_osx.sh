@@ -18,8 +18,8 @@ pushd build_osx >/dev/null 2>&1
         -DBUILD_DOCS=ON \
         -DPYTHON2_INCLUDE_PATH=/usr/include/python2.7 \
         -DWITH_TBB=ON \
-        ../src
-    &&
+        ../src \
+    && \
     make -j8
 } 2>&1 | tee "${SCRIPT_DIR}/build_osx.sh.out"
 
