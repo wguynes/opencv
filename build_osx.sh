@@ -9,16 +9,19 @@ mkdir -p build_osx
 
 pushd build_osx >/dev/null 2>&1
 
-cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=${PREFIX} \
-    -DBUILD_opencv_python2=ON \
-    -DBUILD_EXAMPLES=ON \
-    -DBUILD_DOCS=ON \
-    -DPYTHON2_INCLUDE_PATH=/usr/include/python2.7 \
-    -DWITH_TBB=ON \
-    ../src
-#make -j8
+{
+    cmake \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+        -DBUILD_opencv_python2=ON \
+        -DBUILD_EXAMPLES=ON \
+        -DBUILD_DOCS=ON \
+        -DPYTHON2_INCLUDE_PATH=/usr/include/python2.7 \
+        -DWITH_TBB=ON \
+        ../src
+    &&
+    make -j8
+} 2>&1 | tee "${SCRIPT_DIR}/build_osx.sh.out"
 
 popd >/dev/null 2>&1
 
