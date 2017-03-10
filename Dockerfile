@@ -4,6 +4,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade --yes
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
+    apt-file \
     apt-utils \
     build-essential \
     cmake \
@@ -27,11 +28,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends
     libtiff-dev \
     lsb-release \
     make \
+    openssh-client \
     pkg-config \
     python-dev \
     python-numpy \
     unzip \
     vim
+
+RUN apt-file update
 
 ADD entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
