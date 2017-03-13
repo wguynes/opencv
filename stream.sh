@@ -11,18 +11,20 @@ function kill_vlc {
 trap kill_vlc SIGINT
 
 (
-    open /Applications/${VLC_APPNAME}.app --args http://${VIDEO_CAMERA_FQDN}:${PORT}/
+    open /Applications/${VLC_APPNAME}.app --args \
+        http://${VIDEO_CAMERA_FQDN}:${PORT}/
 ) &
 
 ssh -t -t rpi "
     /usr/bin/raspivid \
-        -o - \
-        -t 0 \
-        -w 640 -h 360 \
-        -fps 25 \
+        --output - \
+        --nopreview \
+        --timeout 0 \
+        --framerate 25 \
         | \
         cvlc -vvv stream:///dev/stdin \
-        --sout '#standard{access=http,mux=ts,dst=:${PORT}}' :demux=h264
+        --sout '#standard{access=http,mux=ts,dst=:${PORT}}' \
+        :demux=h264 \
 "
 
 kill_vlc
