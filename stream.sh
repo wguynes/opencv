@@ -15,7 +15,7 @@ trap kill_vlc SIGINT
         http://${VIDEO_CAMERA_FQDN}:${PORT}/
 ) &
 
-ssh -t -t rpi "
+ssh -t -t rpi " \
     /usr/bin/raspivid \
         --output - \
         --nopreview \
