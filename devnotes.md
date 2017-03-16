@@ -51,10 +51,13 @@ auto wlan0
 sudo ifdown wlan0
 sudo ifup wlan0
 ```
-## Upgrade Raspbian to latest packages
+## Upgrade Raspbian to latest packages and install new ones I need
 ```
-sudo apt-get update
-sudo apt-get upgrade --yes
+sudo DEBIAN_FRONTEND=noninteractive bash -c ' \
+apt-get update && \
+apt-get upgrade --yes && \
+apt-get install --yes vlc-nox \
+'
 ```
 ## Allow passwordless SSH access
 ```
