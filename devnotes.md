@@ -16,50 +16,77 @@ tar cpf - /some/important/data | ssh user@destination-machine "tar xpf - -C /som
 ```
 sudo modprobe bcm2835-v4l2
 ```
-
 ## Create Raspbian PI sdcard
 ```
 curl -O https://downloads.raspberrypi.org/raspbian/images/raspbian-2017-03-03/2017-03-02-raspbian-jessie.zip
 unzip 2017-03-02-raspbian-jessie.zip
 sudo dd bs=1m if=2017-01-11-raspbian-jessie.img of=/dev/rdisk2
 sync
-
+eject card
+```
+## Use configuration menu on pi
+```
 sudo raspi-config
-1. expand filesystem
-2. change user password, current is "raspberry"
-3. internationalization options
-  change timzone US -> Central
-  change keyboard layout "104-key PC" -> Other -> "English (US)" -> No AltGr key -> No compose key -> Ctrl-Alt-BS not stop server
-4. enable camera
+1. Expand Filesystem
+2. Change User Password, current is "raspberry"
+3. Internationalization options
+  1. Change Timezone to US -> Central
+  2. Change Keyboard Layout to "104-key PC" -> Other -> "English (US)" -> No AltGr key -> No compose key -> Ctrl-Alt-BS not stop server
+4. Enable Camera
 5. Advanced Options
-    change hostname
-    ssh server -> enabled
-Exit and reboot
+    Change Hostname
+    SSH Server -> Enabled
+Exit and Reboot
+```
+## Configure Wifi
+```
+sudo vi /etc/network/interfaces
 
-/etc/network/interfaces
 allow-hotplug wlan0
 auto wlan0
-iface wlan0 inet dhcp
-    wpa-ssid "ssid"
-    wpa-psk "password"
+    iface wlan0 inet dhcp
+    wpa-ssid "<network ssid>"
+    wpa-psk "<password>"
 
 sudo ifdown wlan0
 sudo ifup wlan0
-
+```
+## Upgrade Raspbian to latest packages
+```
 sudo apt-get update
 sudo apt-get upgrade --yes
-
-ssh pi@wguynes-rpi.local 'mkdir /home/pi/.ssh; chmod 700 /home/pi/.ssh'
-scp ~/.ssh/id_rsa.pub pi@wguynes-rpi.local:/home/pi/.ssh/authorized_keys
-ssh pi@wguynes-rpi.local
 ```
+## Allow passwordless SSH access
+```
+ssh pi@<hostname> 'mkdir /home/pi/.ssh; chmod 700 /home/pi/.ssh'
+scp ~/.ssh/id_rsa.pub pi@<hostname>:/home/pi/.ssh/authorized_keys
 
-gsettings set org.gnome.Vino prompt-enabled false
-
-DISPLAY=:0 gsettings set org.gnome.Vino authentication-methods "['none']"
-DISPLAY=:0 gsettings set org.gnome.Vino authentication-methods "['vnc']"
-DISPLAY=:0 gsettings set org.gnome.Vino require-encryption false
-DISPLAY=:0 gsettings set org.gnome.Vino vnc-password "$(echo -n "insertnewpass" | base64)"
-DISPLAY=:0 gsettings set org.gnome.Vino vnc-password "$(echo -n "homeyhi1l" | base64)"
-$ sudo apt-get install gnome-keyring
+ssh pi@<hostname>
+```
+## Set up VINO framebuffer vnc service
+```
+gsettings set org.gnome.Vino prompt-enabled false && \
+gsettings set org.gnome.Vino authentication-methods "['vnc']" && \
+gsettings set org.gnome.Vino require-encryption false && \
+gsettings set org.gnome.Vino vnc-password "$(echo -n "insertnewpass" | base64)"
+```
+Run vino-server to test
+```
 DISPLAY=:0 /usr/lib/vino/vino-server
+```
+Configure vino-server to start at boot time
+```
+sudo vi /etc/xdg/autostart/vino-server.desktop
+
+[Desktop Entry]
+Name=Desktop Sharing
+Comment=GNOME Desktop Sharing Server
+Exec=/usr/lib/vino/vino-server
+Terminal=false
+Type=Application
+X-GNOME-Autostart-Phase=Applications
+X-GNOME-AutoRestart=true
+NoDisplay=true
+
+Reboot machine
+```
