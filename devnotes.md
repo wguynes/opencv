@@ -15,6 +15,7 @@ tar cpf - /some/important/data | ssh user@destination-machine "tar xpf - -C /som
 ## Mount the raspberry pi camera as a device /dev/video0
 ```
 sudo modprobe bcm2835-v4l2
+v4l2-ctl --set-ctrl=rotate=270
 ```
 ## Create Raspbian PI sdcard
 ```
@@ -56,7 +57,7 @@ sudo ifup wlan0
 sudo DEBIAN_FRONTEND=noninteractive bash -c ' \
 apt-get update && \
 apt-get upgrade --yes && \
-apt-get install --yes vlc-nox \
+apt-get install --yes vlc-nox vim \
 '
 ```
 ## Allow passwordless SSH access
@@ -93,3 +94,4 @@ NoDisplay=true
 
 Reboot machine
 ```
+
