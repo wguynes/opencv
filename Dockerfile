@@ -24,6 +24,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends
     libjpeg-dev \
     libpng-dev \
     libpython2.7-dev \
+    libraspberrypi-dev \
     libswscale-dev \
     libtiff-dev \
     lsb-release \
