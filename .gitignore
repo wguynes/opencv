@@ -1,9 +1,9 @@
 *.pyc
 *.swp
-build.sh.out
-build_osx.sh.out
-src/build/
+src/build_osx.log
 src/build_osx/
+src/build_raspbian.log
+src/build_raspbian/
 src/debian/.debhelper/
 src/debian/debhelper-build-stamp
 src/debian/files

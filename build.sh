@@ -1,36 +1,29 @@
 #!/bin/bash
 
-usage()
-{
-    echo 'Build only for Raspbian'
-    exit 1
-}
-
-if [[ "$(uname)" != "Linux" ]] || [[ ! -x /usr/bin/lsb_release ]]
-then
-    usage
-fi
-
-/usr/bin/lsb_release -a 2>/dev/null | grep 'Raspbian' >/dev/null 2>&1
-ec=$?
-if [[ $ec -ne 0 ]]
-then
-    usage
-fi
+source utilities.sh
 
 : ${PREFIX:=/usr/local}
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SRC_DIR="$(script_dir)/src"
 
-pushd "${SCRIPT_DIR}/src" >/dev/null 2>&1
+if [[ "$(os_type)" == 'raspbian' ]]
+then
+    BUILD_DIR="${SRC_DIR}/build_raspbian"
+    LOG_FILE="${SRC_DIR}/build_raspbian.log"
+else
+    echo 'Not raspbian os' >&2
+    exit 1
+fi
 
-mkdir -p build
+pushd "${SRC_DIR}" >/dev/null 2>&1
 
-pushd build >/dev/null 2>&1
+mkdir -p "${BUILD_DIR}"
+
+pushd "${BUILD_DIR}" >/dev/null 2>&1
 
 {
     cmake \
         -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+        -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
         -DBUILD_opencv_python2=ON \
         -DBUILD_EXAMPLES=ON \
         -DBUILD_DOCS=ON \
@@ -39,7 +32,7 @@ pushd build >/dev/null 2>&1
         ../src \
     && \
     make -j4
-} 2>&1 | tee "${SCRIPT_DIR}/build.sh.out"
+} 2>&1 | tee "${LOG_FILE}"
 
 popd >/dev/null 2>&1
 
