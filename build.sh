@@ -5,14 +5,21 @@ source utilities.sh
 : ${PREFIX:=/usr/local}
 SRC_DIR="$(script_dir)/src"
 
-if [[ "$(os_type)" == 'raspbian' ]]
+OS_TYPE="$(os_type)"
+NUMBER_OF_JOBS=
+if [[ "${OS_TYPE}" == 'raspbian' ]]
 then
-    BUILD_DIR="${SRC_DIR}/build_raspbian"
-    LOG_FILE="${SRC_DIR}/build_raspbian.log"
+    NUMBER_OF_JOBS=4
+elif [[ "${OS_TYPE}" == 'osx' ]]
+then
+    NUMBER_OF_JOBS=8
 else
-    echo 'Not raspbian os' >&2
+    echo 'Not Raspbian or OSX environment' >&2
     exit 1
 fi
+
+BUILD_DIR="${SRC_DIR}/build_${OS_TYPE}"
+LOG_FILE="${BUILD_DIR}.log"
 
 pushd "${SRC_DIR}" >/dev/null 2>&1
 
@@ -31,7 +38,7 @@ pushd "${BUILD_DIR}" >/dev/null 2>&1
         -DWITH_TBB=ON \
         ../src \
     && \
-    make -j4
+    make -j${NUMBER_OF_JOBS}
 } 2>&1 | tee "${LOG_FILE}"
 
 popd >/dev/null 2>&1
