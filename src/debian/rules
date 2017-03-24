@@ -11,7 +11,7 @@ override_dh_auto_build:
 	:
 
 override_dh_auto_install:
-	cd build && make install DESTDIR=$(DESTDIR) && cd ..
+	cd build_raspbian && make install DESTDIR=$(DESTDIR) && cd ..
 
 override_dh_usrlocal:
 	:
