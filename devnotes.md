@@ -35,8 +35,8 @@ sudo raspi-config
   2. Change Keyboard Layout to "104-key PC" -> Other -> "English (US)" -> No AltGr key -> No compose key -> Ctrl-Alt-BS not stop server
 4. Enable Camera
 5. Advanced Options
-    Change Hostname
-    SSH Server -> Enabled
+  1. Change Hostname
+  2. SSH Server -> Enabled
 Exit and Reboot
 ```
 ## Configure Wifi
