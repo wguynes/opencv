@@ -1,6 +1,6 @@
 # opencv
 
-Repository to build opencv as debian packages for Raspbian 8.0
+Repository to build opencv as debian packages for Raspbian 8.0 and some demo scripts with it.
 
 ## How to clone
 
